@@ -104,7 +104,7 @@ const previewDocument = (file) => {
                 <div
                     class="absolute inset-0 bg-[url('/path-to-your-stars-image.jpg')] bg-cover bg-center opacity-20"
                 ></div>
-                <p class="text-lg font-medium text-gray-300">
+                <p class="text-lg text-gray-300">
                     Qual o nome da pessoa que você quer marcar para sempre?
                 </p>
                 <el-input
@@ -114,8 +114,8 @@ const previewDocument = (file) => {
                     size="large"
                 />
 
-                <div class="mt-4 flex items-center justify-between">
-                    <p class="font-medium text-gray-300">Me manter anônimo</p>
+                <div class="mt-2 flex items-center justify-between">
+                    <p class="text-gray-300">Me manter anônimo</p>
                     <el-checkbox
                         v-model="sendWithWhatsapp"
                         class="text-gray-300"
@@ -133,9 +133,7 @@ const previewDocument = (file) => {
                 ></div>
                 <div class="space-y-4">
                     <div>
-                        <p class="text-lg font-medium text-gray-300">
-                            Mensagem
-                        </p>
+                        <p class="text-lg text-gray-300 mb-2">Mensagem</p>
                         <el-input
                             v-model="message"
                             class="w-full bg-transparent text-gray-200 border border-gray-600 focus:ring-2 focus:ring-purple-600"
@@ -146,7 +144,7 @@ const previewDocument = (file) => {
                     </div>
 
                     <div>
-                        <p class="text-lg font-medium text-gray-300">
+                        <p class="text-lg text-gray-300 mb-2">
                             A data que sua cápsula será enviada
                         </p>
                         <el-input
@@ -170,9 +168,7 @@ const previewDocument = (file) => {
                 <div class="space-y-6">
                     <!-- Foto -->
                     <div>
-                        <p class="text-lg font-medium text-gray-300">
-                            Foto (opcional)
-                        </p>
+                        <p class="text-lg text-gray-300">Foto (opcional)</p>
                         <el-upload
                             action=""
                             accept="image/*"
@@ -186,7 +182,7 @@ const previewDocument = (file) => {
                                 <div class="relative group">
                                     <div
                                         v-if="photoPreview"
-                                        class="w-32 h-32 rounded-full overflow-hidden border-2 border-dashed border-gray-600 hover:border-blue-600"
+                                        class="w-32 h-32 rounded mt-2 overflow-hidden border-2 border-dashed border-gray-600 hover:border-blue-600"
                                     >
                                         <img
                                             :src="photoPreview"
@@ -196,20 +192,9 @@ const previewDocument = (file) => {
                                     </div>
                                     <div
                                         v-else
-                                        class="w-32 h-32 rounded-full border border-gray-500 hover:border-blue-600 flex items-center justify-center"
+                                        class="w-32 h-32 text-2xl rounded mt-2 border border-gray-500 hover:border-blue-600 flex items-center justify-center"
                                     >
-                                        <Icon
-                                            icon="material-symbols:photo-camera-outline"
-                                            class="text-3xl text-gray-400 group-hover:text-blue-600"
-                                        />
-                                    </div>
-                                    <div
-                                        class="absolute bottom-0 right-0 bg-gray-800 rounded-full p-1 shadow-md"
-                                    >
-                                        <Icon
-                                            icon="material-symbols:edit-outline"
-                                            class="text-blue-600 text-lg"
-                                        />
+                                        +
                                     </div>
                                 </div>
                             </template>
@@ -218,7 +203,7 @@ const previewDocument = (file) => {
 
                     <!-- Documento -->
                     <div>
-                        <p class="text-lg font-medium text-gray-300">
+                        <p class="text-lg text-gray-300">
                             Documento (opcional)
                         </p>
                         <el-upload
