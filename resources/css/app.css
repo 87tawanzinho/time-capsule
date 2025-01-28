@@ -1,9 +1,10 @@
-@import url("https://fonts.googleapis.com/css2?family=Oxanium:wght@200..800&family=Space+Grotesk:wght@300..700&display=swap");
-@font-face {
-    font-family: "Oxanium";
-    font-style: normal;
-    font-weight: 100 700;
+html,
+body {
+    height: 100%; /* Permite que o body e o html cresçam com o conteúdo */
+    margin: 0; /* Remove margens padrão */
+    overflow-x: hidden; /* Evita rolagem lateral indesejada */
 }
+
 body {
     background: black;
     color: #9c9c9c;
@@ -11,24 +12,24 @@ body {
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
-    height: 100vh;
-    margin: 0;
-    position: relative; /* Necessário para garantir que a camada ::before funcione corretamente */
+    background-repeat: no-repeat;
+    position: relative;
 }
 
 body::before {
     content: "";
-    position: absolute;
+    position: fixed; /* Fixa o gradiente para cobrir toda a tela */
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 100%; /* Sempre cobre a viewport */
     background: radial-gradient(
         circle,
         rgba(1, 0, 0, 2) 60%,
         rgba(0, 0, 0, 0.1) 90%
     ); /* Mais escuro no centro */
     z-index: -1; /* Coloca a camada atrás do conteúdo */
+    pointer-events: none; /* Garante que a camada não interfira na interação */
 }
 
 .light:hover {
