@@ -10,7 +10,7 @@ const date = ref("");
 const photos = ref("");
 const sendWithWhatsapp = ref(false);
 const sendWithEmail = ref(false);
-
+const showOwner = ref(false);
 const currentStep = ref(0);
 const photoPreview = ref(null);
 const documentPreview = ref(null);
@@ -39,7 +39,9 @@ const previewDocument = (file) => {
     <Head title="Cápsula do Tempo" />
     <Header />
 
-    <div class="w-full max-w-full mx-auto mt-2 px-4 sm:max-w-4xl">
+    <div
+        class="w-full h-full justify-center items-center mx-auto mt-20 px-4 sm:max-w-4xl"
+    >
         <!-- Conteúdo Principal -->
         <div class="relative z-10">
             <!-- Tela Inicial -->
@@ -167,10 +169,17 @@ const previewDocument = (file) => {
                     <div class="mt-4 flex items-center justify-between">
                         <p class="text-gray-300">Manter anonimato</p>
                         <label class="switch">
-                            <input type="checkbox" v-model="sendWithWhatsapp" />
+                            <input type="checkbox" v-model="showOwner" />
                             <span class="slider"></span>
                         </label>
                     </div>
+
+                    <input
+                        v-if="!showOwner"
+                        v-model="name"
+                        class="w-full bg-transparent text-gray-200 border border-gray-700 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-purple-600 mt-4"
+                        placeholder="Seu nome (Será mostrado na mensagem do futuro)"
+                    />
 
                     <!-- Botões de Navegação -->
                     <div class="flex justify-end mt-8 space-x-4">
@@ -328,13 +337,21 @@ const previewDocument = (file) => {
                             />
                         </div>
                     </div>
-
-                    <button
-                        @click="currentStep++"
-                        class="w-full sm:w-32 bg-gradient-to-r from-purple-600 to-pink-600 p-3 rounded-lg hover:from-purple-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-purple-600 transition-all text-white font-semibold"
-                    >
-                        Próximo
-                    </button>
+                    <div class="flex justify-end mt-8 space-x-4">
+                        <button
+                            v-if="currentStep > 0"
+                            @click="currentStep--"
+                            class="w-full sm:w-32 bg-gray-700 text-gray-200 p-3 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-600 transition-all"
+                        >
+                            Voltar
+                        </button>
+                        <button
+                            @click="currentStep++"
+                            class="w-full sm:w-32 bg-gradient-to-r from-purple-600 to-pink-600 p-3 rounded-lg hover:from-purple-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-purple-600 transition-all text-white font-semibold"
+                        >
+                            Próximo
+                        </button>
+                    </div>
 
                     <!-- Etapa 5: Escolha de Envio (WhatsApp ou Email) -->
                 </div>
@@ -370,8 +387,8 @@ const previewDocument = (file) => {
                                     Enviar via WhatsApp
                                 </p>
                                 <p class="text-gray-400 text-sm">
-                                    Receba sua cápsula do tempo diretamente no
-                                    WhatsApp.
+                                    Envie a cápsula do tempo diretamente no
+                                    WhatsApp da pessoa desejada.
                                 </p>
                             </div>
                             <label class="switch">
@@ -408,8 +425,8 @@ const previewDocument = (file) => {
                                     Enviar via Email
                                 </p>
                                 <p class="text-gray-400 text-sm">
-                                    Receba sua cápsula do tempo diretamente no
-                                    seu Email.
+                                    Envie sua cápsula do tempo diretamente no
+                                    Email da pessoa desejada.
                                 </p>
                             </div>
                             <label class="switch">
@@ -470,8 +487,11 @@ const previewDocument = (file) => {
                         >
                             Próximo
                         </button>
+                    </div>
+
+                    <div v-if="currentStep === 5">
                         <button
-                            v-if="currentStep === 4"
+                            v-if="currentStep === 5"
                             @click="submitForm"
                             class="w-full sm:w-32 bg-gradient-to-r from-purple-600 to-pink-600 p-3 rounded-lg hover:from-purple-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-purple-600 transition-all text-white font-semibold"
                         >

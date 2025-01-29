@@ -9,11 +9,15 @@
 
             <div class="flex gap-4">
                 <div class="light flex items-center gap-2">
-                    <button>Enviar uma capsula</button>
+                    <button>Quem somos</button>
+                </div>
+
+                <div class="light flex items-center gap-2">
+                    <button>Discord</button>
 
                     <Icon
-                        icon="mingcute:capsule-fill"
-                        class="text-yellow-300"
+                        icon="ic:baseline-discord"
+                        class="text-purple-400 text-2xl"
                     />
                 </div>
             </div>
