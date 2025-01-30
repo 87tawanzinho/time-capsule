@@ -1,11 +1,17 @@
 <template>
-    <div class="flex justify-between items-center">
-        <div class="hidden lg:flex ml-24">
-            <Icon icon="ic:sharp-whatsapp" class="text-[100px] text-white" />
+    <div
+        class="flex flex-col-reverse lg:flex-row justify-between items-center px-0 lg:px-8"
+    >
+        <div
+            class="flex flex-col text-center justify-center items-center ml-0 mt-4 lg:mt-0 lg:ml-24 gap-4"
+        >
+            <Icon
+                icon="ic:sharp-whatsapp"
+                class="rounded-lg border-gray-700 text-[100px] text-white cursor-pointer hover:bg-purple-900"
+            />
         </div>
 
-        <div class="whatsapp-chat">
-            <!-- Cabeçalho com o nome do contato e ícone de perfil -->
+        <div class="whatsapp-chat ]">
             <div class="chat-header">
                 <div class="profile">
                     <img src="/capsule.jpg" alt="Perfil" class="profile-img" />
@@ -43,17 +49,56 @@
             </div>
         </div>
     </div>
+    <p
+        class="text-center text-gray-500 text-xs mt-12"
+        v-if="formStore.form.date"
+    >
+        Sua mensagem sera enviada em {{ getFormattedTime(formStore.form.date) }}
+    </p>
 </template>
 
 <script setup>
+import moment from "moment";
 import { ref, computed } from "vue";
 import { useFormStore } from "@/stores/formStore"; // Importando o Pinia store
 import { Icon } from "@iconify/vue";
+
 // Criando a instância do store do Pinia
 const formStore = useFormStore();
 
 // Definindo a mensagem e o histórico de mensagens
 const newMessage = computed(() => formStore.form.message); // Liga ao valor da mensagem no Pinia
+
+const getFormattedTime = (date) => {
+    const now = moment();
+    const targetDate = moment(date);
+
+    const years = targetDate.diff(now, "years");
+    const months = targetDate.diff(now, "months") % 12;
+    const days = targetDate.diff(now, "days") % 30;
+    const hours = targetDate.diff(now, "hours") % 24;
+    const minutes = targetDate.diff(now, "minutes") % 60;
+
+    let timeString = "";
+
+    if (years > 0) {
+        timeString += `${years} ano${years > 1 ? "s" : ""}, `;
+    }
+    if (months > 0) {
+        timeString += `${months} mês${months > 1 ? "es" : ""}, `;
+    }
+    if (days > 0) {
+        timeString += `${days} dia${days > 1 ? "s" : ""}, `;
+    }
+    if (hours > 0) {
+        timeString += `${hours} hora${hours > 1 ? "s" : ""}, `;
+    }
+    if (minutes > 0) {
+        timeString += `${minutes} minuto${minutes > 1 ? "s" : ""}`;
+    }
+
+    return timeString;
+};
 </script>
 
 <style scoped>

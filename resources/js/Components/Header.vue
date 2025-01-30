@@ -1,5 +1,5 @@
 <template>
-    <header class="stars">
+    <header class="stars fixed top-0 w-full bg-black z-50">
         <div
             class="bg-black flex justify-between max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8"
         >
@@ -8,10 +8,6 @@
             </div>
 
             <div class="flex gap-4">
-                <div class="light flex items-center gap-2">
-                    <button>Quem somos</button>
-                </div>
-
                 <div class="light flex items-center gap-2">
                     <button>Discord</button>
 

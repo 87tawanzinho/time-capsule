@@ -1,7 +1,10 @@
 <script setup>
 // Importações necessárias
 import { ref, onMounted, onBeforeUnmount, computed } from "vue";
-
+import moment from "moment";
+import { useFormStore } from "@/stores/formStore";
+import "moment/locale/pt-br"; // Importar o locale pt-br
+const formStore = useFormStore();
 // Configuração do relógio
 const hours = ref(0);
 const minutes = ref(0);
@@ -22,6 +25,37 @@ const monthNames = [
     "Novembro",
     "Dezembro",
 ];
+
+const getFormattedTime = (date) => {
+    const now = moment();
+    const targetDate = moment(date);
+
+    const years = targetDate.diff(now, "years");
+    const months = targetDate.diff(now, "months") % 12;
+    const days = targetDate.diff(now, "days") % 30;
+    const hours = targetDate.diff(now, "hours") % 24;
+    const minutes = targetDate.diff(now, "minutes") % 60;
+
+    let timeString = "";
+
+    if (years > 0) {
+        timeString += `${years} ano${years > 1 ? "s" : ""}, `;
+    }
+    if (months > 0) {
+        timeString += `${months} mês${months > 1 ? "es" : ""}, `;
+    }
+    if (days > 0) {
+        timeString += `${days} dia${days > 1 ? "s" : ""}, `;
+    }
+    if (hours > 0) {
+        timeString += `${hours} hora${hours > 1 ? "s" : ""}, `;
+    }
+    if (minutes > 0) {
+        timeString += `${minutes} minuto${minutes > 1 ? "s" : ""}`;
+    }
+
+    return timeString;
+};
 
 // Configuração inicial da data
 onMounted(() => {
@@ -112,14 +146,16 @@ const disabledDate = (time) => {
         <div class="date-picker">
             <input
                 type="date"
-                v-model="selectedDate"
+                v-model="formStore.form.date"
                 :min="new Date().toISOString().split('T')[0]"
                 :disabled-date="disabledDate"
                 class="date-input"
             />
-            <div class="selected-date">
-                🚀 Sua cápsula será aberta em: <br />
-                <span class="highlight">{{ formattedDate }}</span>
+            <div class="selected-date" v-if="formStore.form.date">
+                🚀 Sua cápsula será aberta daqui a: <br />
+                <span class="highlight">{{
+                    getFormattedTime(formStore.form.date)
+                }}</span>
             </div>
             <div v-if="message" class="error-message">{{ message }}</div>
         </div>
@@ -225,12 +261,13 @@ const disabledDate = (time) => {
 
 .highlight {
     display: inline-block;
-    margin-top: 0.5rem;
+    margin-top: 0.8rem;
     padding: 0.5rem 1rem;
-    background: linear-gradient(45deg, #805ad5, #d53f8c);
+    background: linear-gradient(12deg, #805ad5, #d53f8c);
     border-radius: 8px;
     font-weight: bold;
-    font-size: 1.2rem;
+    color: aliceblue;
+    font-size: 1rem;
 }
 
 .error-message {
