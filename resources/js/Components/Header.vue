@@ -9,7 +9,9 @@
 
             <div class="flex gap-4">
                 <div class="light flex items-center gap-2">
-                    <button>Discord</button>
+                    <a href="https://discord.gg/NbeydP6q" target="_blank"
+                        >Discord</a
+                    >
 
                     <Icon
                         icon="ic:baseline-discord"

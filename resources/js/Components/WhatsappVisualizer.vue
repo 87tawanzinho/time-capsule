@@ -11,7 +11,7 @@
             />
         </div>
 
-        <div class="whatsapp-chat ]">
+        <div class="whatsapp-chat">
             <div class="chat-header">
                 <div class="profile">
                     <img src="/capsule.jpg" alt="Perfil" class="profile-img" />
@@ -25,11 +25,19 @@
             <!-- Corpo da conversa -->
             <div class="chat-body">
                 <!-- Mensagens -->
-                <div class="message left">
+                <div class="message left gap-2">
                     <div
+                        v-if="formStore.form.message"
                         class="message-bubble"
                         v-html="formStore.form.message"
                     ></div>
+                    <div class="message-bubble mt-2" v-if="formStore.form.name">
+                        Mensagem programada enviada por:
+                        {{ formStore.form.name }}
+                        <p v-if="formStore.form.owner">
+                            Para: {{ formStore.form.owner }}
+                        </p>
+                    </div>
                 </div>
 
                 <!-- Mais mensagens para simular o histórico -->
@@ -176,8 +184,9 @@ const getFormattedTime = (date) => {
 
 .message {
     display: flex;
-    align-items: flex-end;
-    max-width: 80%;
+    flex-direction: column;
+    justify-items: center;
+    max-width: 95%;
 }
 
 .message.left {

@@ -7,10 +7,8 @@ import Date from "@/Components/Date.vue";
 import Textarea from "@/Components/Textarea.vue";
 import WhatsappVisualizer from "@/Components/WhatsappVisualizer.vue";
 import Text from "@/Components/Text.vue";
-const name = ref("");
-const message = ref("");
-const date = ref("");
-const photos = ref("");
+import { useFormStore } from "@/stores/formStore";
+const formStore = useFormStore();
 const sendWithWhatsapp = ref(false);
 const sendWithEmail = ref(false);
 const showOwner = ref(false);
@@ -152,7 +150,7 @@ const previewDocument = (file) => {
 
                     <!-- Input do nome -->
                     <input
-                        v-model="name"
+                        v-model="formStore.form.name"
                         class="w-full bg-transparent text-gray-200 border border-gray-700 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-purple-600 mt-4"
                         placeholder="Nome do destinatário"
                     />
@@ -167,7 +165,7 @@ const previewDocument = (file) => {
 
                     <input
                         v-if="!showOwner"
-                        v-model="name"
+                        v-model="formStore.form.owner"
                         class="w-full bg-transparent text-gray-200 border border-gray-700 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-purple-600 mt-4"
                         placeholder="Seu nome (Será mostrado na mensagem do futuro)"
                     />
@@ -363,7 +361,8 @@ const previewDocument = (file) => {
             </div>
 
             <div
-                class="bg-[#121212] bg-opacity-90 p-6 sm:p-8 rounded-xl shadow-lg border border-gray-800 space-y-6"
+                v-if="!showInformation"
+                class="bg-[#121212] mt-8 bg-opacity-90 p-6 sm:p-8 rounded-xl shadow-lg border border-gray-800 space-y-6"
             >
                 <div>
                     <WhatsappVisualizer />
