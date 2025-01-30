@@ -7,6 +7,7 @@ const hours = ref(0);
 const minutes = ref(0);
 const seconds = ref(0);
 const selectedDate = ref("");
+const message = ref("");
 const monthNames = [
     "Janeiro",
     "Fevereiro",
@@ -54,6 +55,21 @@ const formattedDate = computed(() => {
     const [year, month, day] = selectedDate.value.split("-");
     return `${parseInt(day)} de ${monthNames[parseInt(month) - 1]} de ${year}`;
 });
+
+// Função para desabilitar as datas inválidas
+const disabledDate = (time) => {
+    const currentDate = new Date();
+    const twoYearsLater = new Date();
+    twoYearsLater.setFullYear(currentDate.getFullYear() + 2);
+    if (time.getTime() < currentDate.getTime()) return true;
+    if (time.getTime() > twoYearsLater.getTime()) {
+        message.value =
+            "Caso a data selecionada seja superior, entre em contato no Discord";
+        return true;
+    }
+    message.value = "";
+    return false;
+};
 </script>
 
 <template>
@@ -98,12 +114,14 @@ const formattedDate = computed(() => {
                 type="date"
                 v-model="selectedDate"
                 :min="new Date().toISOString().split('T')[0]"
+                :disabled-date="disabledDate"
                 class="date-input"
             />
             <div class="selected-date">
                 🚀 Sua cápsula será aberta em: <br />
                 <span class="highlight">{{ formattedDate }}</span>
             </div>
+            <div v-if="message" class="error-message">{{ message }}</div>
         </div>
     </div>
 </template>
@@ -213,5 +231,12 @@ const formattedDate = computed(() => {
     border-radius: 8px;
     font-weight: bold;
     font-size: 1.2rem;
+}
+
+.error-message {
+    margin-top: 1rem;
+    color: red;
+    font-size: 1rem;
+    font-weight: bold;
 }
 </style>

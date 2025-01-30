@@ -4,6 +4,9 @@ import Header from "@/Components/Header.vue";
 import { ref, computed } from "vue";
 import { Icon } from "@iconify/vue";
 import Date from "@/Components/Date.vue";
+import Textarea from "@/Components/Textarea.vue";
+import WhatsappVisualizer from "@/Components/WhatsappVisualizer.vue";
+import Text from "@/Components/Text.vue";
 const name = ref("");
 const message = ref("");
 const date = ref("");
@@ -85,19 +88,7 @@ const previewDocument = (file) => {
             </div>
 
             <div class="mt-6 mb-2" v-if="showInformation">
-                <p class="text-gray-400 text-base sm:text-lg mb-4">
-                    Imagine poder enviar uma mensagem para o futuro, algo que
-                    será aberto daqui a 5, 10 ou até 20 anos. Uma declaração de
-                    amor, um segredo guardado, ou até mesmo uma mensagem
-                    profissional. Com a Cápsula do Tempo, você pode eternizar
-                    momentos e sentimentos que serão revelados no momento certo.
-                </p>
-
-                <p class="text-gray-400 text-base sm:text-lg">
-                    A vida é feita de momentos efêmeros, mas alguns sentimentos
-                    merecem ser lembrados para sempre. O que você gostaria de
-                    dizer para o futuro?
-                </p>
+                <Text :number="1" />
             </div>
 
             <!-- Formulário de Etapas -->
@@ -215,12 +206,7 @@ const previewDocument = (file) => {
                         revelada no momento certo. Pode ser uma declaração, um
                         segredo ou qualquer pensamento especial.
                     </p>
-                    <textarea
-                        v-model="message"
-                        class="w-full bg-transparent text-gray-200 border border-gray-700 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-purple-600"
-                        placeholder="Digite sua mensagem..."
-                        rows="6"
-                    ></textarea>
+                    <Textarea />
 
                     <!-- Botões de Navegação -->
                     <div class="flex justify-end mt-8 space-x-4">
@@ -481,7 +467,6 @@ const previewDocument = (file) => {
                             Voltar
                         </button>
                         <button
-                            v-if="currentStep < 5"
                             @click="currentStep++"
                             class="w-full sm:w-32 bg-gradient-to-r from-purple-600 to-pink-600 p-3 rounded-lg hover:from-purple-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-purple-600 transition-all text-white font-semibold"
                         >
@@ -500,8 +485,13 @@ const previewDocument = (file) => {
                     </div>
                 </div>
 
-                <!-- Botão de Envio -->
-                <div class="flex justify-end mt-8 space-x-4"></div>
+                <div
+                    class="bg-[#121212] bg-opacity-90 p-6 sm:p-8 rounded-xl shadow-lg border border-gray-800 space-y-6"
+                >
+                    <div>
+                        <WhatsappVisualizer />
+                    </div>
+                </div>
             </div>
         </div>
     </div>
