@@ -1,13 +1,14 @@
 <template>
     <div
         class="flex flex-col-reverse lg:flex-row justify-between items-center px-0 lg:px-8"
+        title="Ilustração de uma cápsula do tempo no whatsapp"
     >
         <div
             class="flex flex-col text-center justify-center items-center ml-0 mt-4 lg:mt-0 lg:ml-24 gap-4"
         >
             <Icon
-                icon="ic:sharp-whatsapp"
-                class="rounded-lg border-gray-700 text-[100px] text-white cursor-pointer hover:bg-purple-900"
+                icon="mdi:whatsapp"
+                class="rounded-lg border-gray-700 text-[100px] text-green-500 cursor-pointer hover:bg-green-900"
             />
         </div>
 
@@ -24,23 +25,37 @@
 
             <!-- Corpo da conversa -->
             <div class="chat-body">
-                <!-- Mensagens -->
+                <!-- Mensagem como uma cápsula do tempo -->
                 <div class="message left gap-2">
-                    <div
-                        v-if="formStore.form.message"
-                        class="message-bubble"
-                        v-html="formStore.form.message"
-                    ></div>
-                    <div class="message-bubble mt-2" v-if="formStore.form.name">
-                        Mensagem programada enviada por:
-                        {{ formStore.form.name }}
-                        <p v-if="formStore.form.owner">
-                            Para: {{ formStore.form.owner }}
-                        </p>
+                    <div v-if="formStore.form.message" class="message-bubble">
+                        <div
+                            class="message-content"
+                            v-html="formStore.form.message"
+                        ></div>
+                        <!-- Detalhes da carta secreta -->
+                        <div class="letter-details">
+                            <div class="sender">
+                                <Icon icon="mdi:rocket-launch" class="icon" />
+                                <span
+                                    >De:
+                                    {{
+                                        formStore.form.owner &&
+                                        formStore.form.dontShowOwner === false
+                                            ? formStore.form.owner
+                                            : "um desconhecido"
+                                    }}</span
+                                >
+                            </div>
+                            <div class="receiver">
+                                <Icon icon="mdi:planet" class="icon" />
+                                <span
+                                    >Destinado a:
+                                    {{ formStore.form.name }}</span
+                                >
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <!-- Mais mensagens para simular o histórico -->
             </div>
 
             <!-- Barra de entrada de texto -->
@@ -52,7 +67,7 @@
                     @keyup.enter="sendMessage"
                 />
                 <button @click="sendMessage">
-                    <Icon icon="famicons:send" class="text-2xl text-black" />
+                    <Icon icon="mdi:send" class="text-2xl text-green-500" />
                 </button>
             </div>
         </div>
@@ -61,7 +76,7 @@
         class="text-center text-gray-500 text-xs mt-12"
         v-if="formStore.form.date"
     >
-        Sua mensagem sera enviada em {{ getFormattedTime(formStore.form.date) }}
+        Sua mensagem será enviada em {{ getFormattedTime(formStore.form.date) }}
     </p>
 </template>
 
@@ -115,7 +130,7 @@ const getFormattedTime = (date) => {
     width: 40%;
     max-width: 600px;
     height: 60vh;
-    background-color: #121212; /* Fundo escuro */
+    background-color: #0b141a; /* Fundo escuro do WhatsApp */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -129,7 +144,7 @@ const getFormattedTime = (date) => {
         width: 100%;
         max-width: 600px;
         height: 60vh;
-        background-color: #121212; /* Fundo escuro */
+        background-color: #0b141a; /* Fundo escuro do WhatsApp */
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -138,9 +153,10 @@ const getFormattedTime = (date) => {
         overflow: hidden;
     }
 }
+
 /* Cabeçalho */
 .chat-header {
-    background-color: #202c33; /* Cor do cabeçalho */
+    background-color: #202c33; /* Cor do cabeçalho do WhatsApp */
     color: white;
     padding: 14px;
     display: flex;
@@ -193,49 +209,63 @@ const getFormattedTime = (date) => {
     justify-content: flex-start;
 }
 
-.message.right {
-    justify-content: flex-end;
-}
-
 .message-bubble {
-    padding: 10px 15px;
-    border-radius: 18px;
+    padding: 16px;
+    border-radius: 8px;
     font-size: 14px;
     max-width: 75%;
     word-wrap: break-word;
-    background-color: #25d366;
+    background-color: #202c33; /* Cor das mensagens recebidas */
     color: white;
     position: relative;
 }
 
-.message.left .message-bubble {
-    background-color: #2f3b3e;
+.message-content {
+    margin-bottom: 12px;
 }
 
-.message.right .message-bubble {
-    background-color: #25d366;
+.letter-details {
+    border-top: 1px solid #2a3942;
+    padding-top: 12px;
+    font-size: 12px;
+    color: #919191;
 }
 
+.sender,
+.receiver {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.icon {
+    font-size: 16px;
+    color: #df7fde; /* Cor do ícone */
+}
+
+/* Rodapé */
 .chat-footer {
     display: flex;
     align-items: center;
     padding: 10px 14px;
     border-bottom-left-radius: 16px;
     border-bottom-right-radius: 16px;
+    background-color: #202c33; /* Cor do rodapé */
 }
 
 .chat-footer input {
     flex: 1;
     padding: 10px;
     border-radius: 20px;
-    background-color: #333;
-    border: 1px solid #555;
+    background-color: #2a3942; /* Cor do input */
+    border: 1px solid #2a3942;
     color: white;
     font-size: 14px;
 }
 
 .chat-footer button {
-    background-color: #25d366;
+    background-color: #005c4b; /* Cor do botão de enviar */
     border: none;
     padding: 10px;
     border-radius: 50%;
@@ -250,6 +280,6 @@ const getFormattedTime = (date) => {
 
 .chat-footer input:focus {
     outline: none;
-    border-color: #4caf50;
+    border-color: #005c4b;
 }
 </style>

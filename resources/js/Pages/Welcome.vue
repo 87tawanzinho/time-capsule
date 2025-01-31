@@ -7,6 +7,7 @@ import Date from "@/Components/Date.vue";
 import Textarea from "@/Components/Textarea.vue";
 import WhatsappVisualizer from "@/Components/WhatsappVisualizer.vue";
 import Text from "@/Components/Text.vue";
+import Rocket from "@/Components/Rocket.vue";
 import { useFormStore } from "@/stores/formStore";
 const formStore = useFormStore();
 const sendWithWhatsapp = ref(false);
@@ -16,25 +17,8 @@ const currentStep = ref(0);
 const photoPreview = ref(null);
 const documentPreview = ref(null);
 const showInformation = ref(true);
-const whatsappNumber = ref("");
-const emailAddress = ref("");
 const enableNotifications = ref(false);
-const userWhatsappNumber = ref("");
-const previewPhoto = (file) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        photoPreview.value = e.target.result;
-    };
-    reader.readAsDataURL(file);
-};
-
-const previewDocument = (file) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        documentPreview.value = e.target.result;
-    };
-    reader.readAsDataURL(file);
-};
+const submitted = ref(true);
 </script>
 <template>
     <Head title="Cápsula do Tempo" />
@@ -158,13 +142,16 @@ const previewDocument = (file) => {
                     <div class="mt-4 flex items-center justify-between">
                         <p class="text-gray-300">Manter anonimato</p>
                         <label class="switch">
-                            <input type="checkbox" v-model="showOwner" />
+                            <input
+                                type="checkbox"
+                                v-model="formStore.form.dontShowOwner"
+                            />
                             <span class="slider"></span>
                         </label>
                     </div>
 
                     <input
-                        v-if="!showOwner"
+                        v-if="!formStore.form.dontShowOwner"
                         v-model="formStore.form.owner"
                         class="w-full bg-transparent text-gray-200 border border-gray-700 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-purple-600 mt-4"
                         placeholder="Seu nome (Será mostrado na mensagem do futuro)"
@@ -270,7 +257,7 @@ const previewDocument = (file) => {
                     <!-- Input para número do WhatsApp -->
                     <div v-if="sendWithWhatsapp" class="pl-14">
                         <input
-                            v-model="whatsappNumber"
+                            v-model="formStore.form.whatsappTo"
                             class="w-full bg-transparent text-gray-200 border border-gray-700 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-purple-600"
                             placeholder="Número do WhatsApp (com DDD)"
                         />
@@ -305,7 +292,7 @@ const previewDocument = (file) => {
                     <!-- Input para email -->
                     <div v-if="sendWithEmail" class="pl-14">
                         <input
-                            v-model="emailAddress"
+                            v-model="formStore.form.emailAddress"
                             class="w-full bg-transparent text-gray-200 border border-gray-700 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-purple-600"
                             placeholder="Endereço de Email"
                         />
@@ -318,15 +305,18 @@ const previewDocument = (file) => {
                         Receber notificações sobre o tempo restante?
                     </p>
                     <label class="switch">
-                        <input type="checkbox" v-model="enableNotifications" />
+                        <input
+                            type="checkbox"
+                            v-model="formStore.form.enableNotifications"
+                        />
                         <span class="slider"></span>
                     </label>
                 </div>
 
                 <!-- Input para WhatsApp do usuário (se notificações estiverem ativadas) -->
-                <div v-if="enableNotifications" class="mt-4">
+                <div v-if="formStore.form.enableNotifications" class="mt-4">
                     <input
-                        v-model="userWhatsappNumber"
+                        v-model="formStore.form.whatsappToNotificationsOwner"
                         class="w-full bg-transparent text-gray-200 border border-gray-700 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-purple-600"
                         placeholder="Seu número do WhatsApp (com DDD)"
                     />
@@ -342,16 +332,15 @@ const previewDocument = (file) => {
                         Voltar
                     </button>
                     <button
+                        v-if="currentStep < 3"
                         @click="currentStep++"
                         class="w-full sm:w-32 bg-gradient-to-r from-purple-600 to-pink-600 p-3 rounded-lg hover:from-purple-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-purple-600 transition-all text-white font-semibold"
                     >
                         Próximo
                     </button>
-                </div>
 
-                <div v-if="currentStep === 5">
                     <button
-                        v-if="currentStep === 5"
+                        v-if="currentStep === 3"
                         @click="submitForm"
                         class="w-full sm:w-32 bg-gradient-to-r from-purple-600 to-pink-600 p-3 rounded-lg hover:from-purple-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-purple-600 transition-all text-white font-semibold"
                     >
@@ -361,13 +350,14 @@ const previewDocument = (file) => {
             </div>
 
             <div
-                v-if="!showInformation"
-                class="bg-[#121212] mt-8 bg-opacity-90 p-6 sm:p-8 rounded-xl shadow-lg border border-gray-800 space-y-6"
+                class="bg-[#121212] bg-opacity-90 p-6 sm:p-8 rounded-xl shadow-lg border border-gray-800 space-y-6 mt-12"
             >
                 <div>
                     <WhatsappVisualizer />
                 </div>
             </div>
+
+            <div v-if="!submitted"></div>
         </div>
     </div>
 </template>

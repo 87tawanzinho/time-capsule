@@ -15,10 +15,11 @@ export const useFormStore = defineStore("form", () => {
         photoPreview: null,
         documentPreview: null,
         showInformation: true,
-        whatsappNumber: "",
+        whatsappTo: "",
         emailAddress: "",
+        dontShowOwner: true,
         enableNotifications: false,
-        userWhatsappNumber: "",
+        whatsappToNotificationsOwner: "",
     });
 
     const setFormData = (key, value) => {
