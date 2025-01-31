@@ -14,26 +14,15 @@ services:
             - laravel_network
         environment:
             - APP_ENV=local
-            - APP_KEY=base64:chaveAletoriaAqui
+            - APP_KEY=${APP_KEY} # Use variáveis de ambiente para segurança
             - DB_CONNECTION=mysql
-            - DB_HOST=db
-            - DB_PORT=3306
-            - DB_DATABASE=laravel
-            - DB_USERNAME=root
-            - DB_PASSWORD=secret
+            - DB_HOST=your_mysql_server_ip_or_hostname # Aqui você coloca o IP ou hostname do seu servidor MySQL
+            - DB_PORT=3306 # A porta do seu MySQL
+            - DB_DATABASE=time_capsule # Nome do banco de dados
+            - DB_USERNAME=$DB_USERNAME} # Usuário do seu MySQL
+            - DB_PASSWORD=${DB_PASSWORD} # Senha do seu MySQL
 
-    db:
-        image: mysql:5.7
-        container_name: mysql-db
-        environment:
-            MYSQL_ROOT_PASSWORD: secret
-            MYSQL_DATABASE: laravel
-        ports:
-            - "3306:3306"
-        volumes:
-            - dbdata:/var/lib/mysql
-        networks:
-            - laravel_network
+# Removido o serviço db, pois estamos usando o MySQL externo
 
 volumes:
     dbdata:
