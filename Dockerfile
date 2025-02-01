@@ -1,47 +1,30 @@
-# Escolher uma imagem base do PHP com o FPM
-FROM php:8.2-fpm
+# Use uma imagem PHP adequada para o Laravel
+FROM php:8.1-fpm
 
-# Instalar dependências do sistema
+# Instalar pacotes necessários
 RUN apt-get update && apt-get install -y \
-    libpng-dev \
-    libjpeg62-turbo-dev \
-    libfreetype6-dev \
-    libzip-dev \
-    git \
-    curl \
-    zip \
-    unzip \
-    nodejs \
-    npm \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd pdo pdo_mysql zip
+    libpcntl-dev \
+    && docker-php-ext-install pcntl \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-# Instalar a extensão pcntl (necessária para Pail)
-RUN apt-get install -y libpcntl-dev && docker-php-ext-install pcntl
+# Outras configurações para o Laravel
+RUN apt-get update && apt-get install -y git unzip libzip-dev libpng-dev libjpeg-dev libfreetype6-dev \
+    && docker-php-ext-configure zip \
+    && docker-php-ext-install zip gd pdo pdo_mysql
 
-# Instalar o Composer
+# Instalar Composer (necessário para o Laravel)
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Definir o diretório de trabalho no container
+# Configurações do Laravel e do ambiente
 WORKDIR /var/www
 
-# Copiar o código do projeto para dentro do container
+# Copiar o código do aplicativo Laravel
 COPY . .
 
-# Instalar as dependências do Composer e do Node.js
-RUN composer install --no-autoloader --no-scripts
-RUN npm install
+# Instalar dependências do Laravel (com o Composer)
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
-# Gerar autoload do Composer
-RUN composer dump-autoload --optimize
-
-# Expor as portas do PHP-FPM e Vite
+# Expor a porta
 EXPOSE 9000
-EXPOSE 5173
-
-# Copiar o script de inicialização
-COPY start.sh /usr/local/bin/start.sh
-RUN chmod +x /usr/local/bin/start.sh
-
-# Definir o comando para rodar o script de inicialização
-CMD ["/usr/local/bin/start.sh"]
+CMD ["php-fpm"]
