@@ -1,5 +1,5 @@
 # Escolher uma imagem base do PHP com o FPM
-FROM php:8.1-fpm
+FROM php:8.2-fpm
 
 # Instalar dependências do sistema
 RUN apt-get update && apt-get install -y \
