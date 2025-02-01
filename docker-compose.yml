@@ -1,31 +1,48 @@
 version: "3.8"
 
 services:
-    app:
-        build:
-            context: .
-            dockerfile: Dockerfile
-        container_name: laravel-app
-        ports:
-            - "8080:80" # Acesso ao servidor na porta 8080
-        volumes:
-            - .:/var/www/html
-        networks:
-            - laravel_network
-        environment:
-            - APP_ENV=local
-            - APP_KEY=${APP_KEY} # Use variáveis de ambiente para segurança
-            - DB_CONNECTION=mysql
-            - DB_HOST=${DB_HOST} # Coloque o IP ou hostname do servidor MySQL externo
-            - DB_PORT=3306
-            - DB_DATABASE=time_capsule # Nome do banco de dados
-            - DB_USERNAME=${DB_USERNAME} # Usuário do MySQL
-            - DB_PASSWORD=${DB_PASSWORD} # Senha do MySQL
-        depends_on:
-            - db
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laravel-app
+    ports:
+      - "8080:80"  # Acesso ao servidor na porta 8080
+    volumes:
+      - .:/var/www/html
+    networks:
+      - laravel_network
+    environment:
+      - APP_ENV=local
+      - APP_KEY=${APP_KEY}  # Use variáveis de ambiente para segurança
+      - DB_CONNECTION=mysql
+      - DB_HOST=${DB_HOST}  # Coloque o IP ou hostname do servidor MySQL externo
+      - DB_PORT=3306
+      - DB_DATABASE=time_capsule  # Nome do banco de dados
+      - DB_USERNAME=${DB_USERNAME}  # Usuário do MySQL
+      - DB_PASSWORD=${DB_PASSWORD}  # Senha do MySQL
+    depends_on:
+      - db
+    restart: always  # Reinicia o container automaticamente se falhar
 
-    # Não será necessário um serviço separado para o Apache, já que ele está no app
+  db:
+    image: mysql:5.7
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: time_capsule
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - laravel_network
+    restart: always
 
 networks:
-    laravel_network:
-        driver: bridge
+  laravel_network:
+    driver: bridge
+
+volumes:
+  mysql-data:
+    driver: local
