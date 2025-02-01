@@ -1,16 +1,21 @@
 #!/bin/bash
 
-# Rodar o Composer (instalar dependências)
-composer install
+# Rodar o servidor PHP (Laravel)
+php artisan serve --host=0.0.0.0 --port=8000 &
 
-# Rodar o npm (instalar dependências do Node.js)
-npm install
+# Rodar o processo de fila do Laravel
+php artisan queue:listen --tries=1 &
 
-# Rodar o npm run dev (compilar os assets do frontend)
-npm run dev
+# Rodar o Vite (frontend)
+npm run dev &
 
-# Rodar o composer run dev (se houver algum script dev no composer.json)
+#!/bin/bash
+
+# Rodar o comando "composer run dev" para iniciar o Laravel e o Vite
 composer run dev
 
-# Rodar o PHP-FPM para que o container continue rodando
-php-fpm
+# Manter o container em execução
+wait -n
+
+# Manter o container em execução
+wait -n

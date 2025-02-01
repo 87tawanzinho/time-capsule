@@ -32,12 +32,13 @@ RUN npm install
 # Gerar autoload do Composer
 RUN composer dump-autoload --optimize
 
+# Expor as portas do PHP-FPM e Vite
+EXPOSE 9000
+EXPOSE 5173
+
 # Copiar o script de inicialização
 COPY start.sh /usr/local/bin/start.sh
 RUN chmod +x /usr/local/bin/start.sh
-
-# Expor a porta do PHP-FPM
-EXPOSE 9000
 
 # Definir o comando para rodar o script de inicialização
 CMD ["/usr/local/bin/start.sh"]
