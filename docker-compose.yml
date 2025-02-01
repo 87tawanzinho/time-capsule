@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     container_name: laravel-app
     ports:
-      - "8000:8000"  # Porta do Laravel
+      - "8001:8001"  # Porta do Laravel, alterada para 8001
       - "5174:5174"  # Porta do Vite
     volumes:
       - .:/var/www
