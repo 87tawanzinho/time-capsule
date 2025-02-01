@@ -19,17 +19,17 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Definir o diretório de trabalho
 WORKDIR /var/www/html
 
-# Copiar o código fonte para dentro do container
+# Copiar o código fonte da aplicação para o container
 COPY . .
 
 # Rodar o Composer para instalar as dependências do Laravel
 RUN composer install
 
-# Copiar a configuração do Nginx para o container
+# Copiar o arquivo de configuração do Nginx para o container
 COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
 
-# Expor a porta que o Nginx vai ouvir
+# Expor a porta 80, para que o Nginx possa servir a aplicação
 EXPOSE 80
 
 # Iniciar o Nginx e PHP-FPM quando o container for iniciado
-CMD ["sh", "-c", "php-fpm & nginx -g 'daemon off;'"]
+CMD php-fpm & nginx -g 'daemon off;'
