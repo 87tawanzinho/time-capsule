@@ -1,18 +1,46 @@
 version: '3.8'
 
 services:
+  traefik:
+    image: traefik:v2.11
+    container_name: traefik
+    command:
+      - "--api.insecure=true"  # Painel de controle do Traefik (opcional)
+      - "--providers.docker=true"  # Habilitar integração com Docker
+      - "--entryPoints.web.address=:80"  # Porta HTTP
+      - "--entryPoints.websecure.address=:443"  # Porta HTTPS
+      - "--certificatesResolvers.myresolver.acme.httpChallenge.entryPoint=web"  # Desafio ACME via HTTP
+      - "--certificatesResolvers.myresolver.acme.email=seu-email@dominio.com"  # Seu e-mail para Let's Encrypt
+      - "--certificatesResolvers.myresolver.acme.storage=/acme.json"  # Onde os certificados serão armazenados
+    ports:
+      - "80:80"  # Expondo a porta 80
+      - "443:443"  # Expondo a porta 443
+      - "8080:8080"  # Expondo o painel do Traefik
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"  # Para integração com o Docker
+      - "./acme.json:/acme.json"  # Onde os certificados ACME serão armazenados
+    networks:
+      - laravel-network
+    labels:
+      - "traefik.enable=true"
+
   app:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: laravel-app
     ports:
-      - "8001:8001"  # Porta do Laravel, alterada para 8001
+      - "8001:8001"  # Porta do Laravel
       - "5174:5174"  # Porta do Vite
     volumes:
       - .:/var/www
     networks:
       - laravel-network
+    labels:
+      - "traefik.http.routers.laravel.rule=Host(`capsule-tempo.yeix3z.easypanel.host`)"  # Regra para o Laravel
+      - "traefik.http.services.laravel.loadbalancer.server.port=8001"  # Porta do Laravel (ajustada para 8001)
+      - "traefik.http.routers.vite.rule=Host(`capsule-tempo.yeix3z.easypanel.host`) && PathPrefix(`/vite`)"  # Regra para o Vite
+      - "traefik.http.services.vite.loadbalancer.server.port=5174"  # Porta do Vite (ajustada para 5174)
 
   nginx:
     image: nginx:latest
@@ -26,6 +54,9 @@ services:
       - app
     networks:
       - laravel-network
+    labels:
+      - "traefik.http.routers.nginx.rule=Host(`capsule-tempo.yeix3z.easypanel.host`)"  # Regra para Nginx
+      - "traefik.http.services.nginx.loadbalancer.server.port=80"  # Porta do Nginx
 
 networks:
   laravel-network:
