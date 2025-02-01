@@ -1,15 +1,9 @@
 # Use uma imagem PHP adequada para o Laravel
-FROM php:8.1-fpm
+FROM php:8.2-fpm
 
-# Instalar pacotes necessários
+# Instalar pacotes necessários (sem libpcntl-dev)
 RUN apt-get update && apt-get install -y \
-    libpcntl-dev \
-    && docker-php-ext-install pcntl \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-# Outras configurações para o Laravel
-RUN apt-get update && apt-get install -y git unzip libzip-dev libpng-dev libjpeg-dev libfreetype6-dev \
+    git unzip libzip-dev libpng-dev libjpeg-dev libfreetype6-dev \
     && docker-php-ext-configure zip \
     && docker-php-ext-install zip gd pdo pdo_mysql
 
