@@ -1,39 +1,24 @@
-# Use a imagem base do PHP com FPM
-FROM php:8.2-fpm
+FROM php:8.3-fpm-alpine3.19
 
-# Instalar dependências necessárias
-RUN apt-get update && apt-get install -y \
-    git \
+# Install system dependencies
+RUN apk add --no-cache \
+    bash \
     curl \
     libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    zip \
-    unzip
+    libzip-dev \
+    zlib-dev
 
-# Limpar cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+# Install PHP extensions
+RUN docker-php-ext-install gd \
+    && docker-php-ext-install zip
 
-# Instalar extensões do PHP
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
-
-# Instalar o Composer
+# Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Definir o diretório de trabalho
-WORKDIR /var/www/html
+# Install node and npm
+RUN apk add --no-cache nodejs npm
 
-# Copiar o código do projeto para o container
-COPY . .
+# Set working directory
+WORKDIR /var/www
 
-# Instalar dependências do Composer
-RUN composer install --optimize-autoloader --no-dev
-
-# Definir permissões
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-
-# Expor a porta 9000 para o PHP-FPM
 EXPOSE 9000
-
-# Comando para rodar o PHP-FPM
-CMD ["php-fpm"]
