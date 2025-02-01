@@ -32,4 +32,4 @@ COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 
 # Iniciar o Nginx e PHP-FPM quando o container for iniciado
-CMD php-fpm & nginx -g 'daemon off;'
+CMD ["sh", "-c", "php-fpm & nginx -g 'daemon off;'"]
