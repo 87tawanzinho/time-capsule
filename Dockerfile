@@ -1,35 +1,39 @@
-# Use a imagem oficial do PHP com FPM (FastCGI Process Manager)
+# Use a imagem base do PHP com FPM
 FROM php:8.2-fpm
 
-# Instalar dependências do sistema
+# Instalar dependências necessárias
 RUN apt-get update && apt-get install -y \
-    libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
-    zip \
     git \
-    nginx \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd \
-    && docker-php-ext-install pdo pdo_mysql
+    curl \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    unzip
 
-# Instalar dependências do Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# Limpar cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Instalar extensões do PHP
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+
+# Instalar o Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Definir o diretório de trabalho
 WORKDIR /var/www/html
 
-# Copiar o código fonte da aplicação para o container
+# Copiar o código do projeto para o container
 COPY . .
 
-# Rodar o Composer para instalar as dependências do Laravel
-RUN composer install
+# Instalar dependências do Composer
+RUN composer install --optimize-autoloader --no-dev
 
-# Copiar o arquivo de configuração do Nginx para o container
-COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
+# Definir permissões
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Expor a porta 80, para que o Nginx possa servir a aplicação
-EXPOSE 80
+# Expor a porta 9000 para o PHP-FPM
+EXPOSE 9000
 
-# Iniciar o Nginx e PHP-FPM quando o container for iniciado
-CMD php-fpm & nginx -g 'daemon off;'
+# Comando para rodar o PHP-FPM
+CMD ["php-fpm"]
