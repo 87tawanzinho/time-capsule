@@ -1,13 +1,13 @@
 version: "3.8"
 
 services:
-    # Serviço do PHP
+    # Serviço PHP
     php:
         build:
-            context: .
+            context: . # Direciona para o diretório onde está o Dockerfile
             dockerfile: Dockerfile
         volumes:
-            - ./src:/var/www
+            - .:/var/www # Mapeia o diretório do projeto para o contêiner
         networks:
             - app-network
 
@@ -16,7 +16,7 @@ services:
         image: nginx:alpine
         volumes:
             - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-            - ./src:/var/www
+            - .:/var/www # Mapeia o diretório do projeto para o contêiner
         ports:
             - "80:80"
         networks:
@@ -24,7 +24,7 @@ services:
         depends_on:
             - php
 
-    # Serviço do MySQL (opcional, caso precise de banco de dados)
+    # Serviço MySQL (opcional)
     mysql:
         image: mysql:5.7
         environment:
@@ -34,15 +34,6 @@ services:
             MYSQL_PASSWORD: laravel_password
         volumes:
             - mysql_data:/var/lib/mysql
-        networks:
-            - app-network
-
-    # Serviço para o Composer
-    composer:
-        image: composer:2
-        volumes:
-            - ./src:/var/www
-        working_dir: /var/www
         networks:
             - app-network
 

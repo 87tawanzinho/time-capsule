@@ -16,7 +16,7 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Copiar o código da aplicação
 WORKDIR /var/www
-COPY src/ .
+COPY . .
 
 # Definir permissões corretas para diretórios
 RUN chown -R www-data:www-data /var/www
