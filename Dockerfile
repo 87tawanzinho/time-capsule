@@ -15,6 +15,9 @@ RUN apt-get update && apt-get install -y \
 # Instalar Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
+RUN rm -rf /etc/nginx/sites-enabled/* /etc/nginx/sites-available/*
+
+
 # Configuração do Nginx
 COPY nginx/default.conf /etc/nginx/sites-enabled/default.conf
 
