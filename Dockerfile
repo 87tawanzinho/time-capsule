@@ -1,3 +1,4 @@
+
 # Use uma imagem oficial do PHP com Nginx
 FROM php:8.2-fpm
 
@@ -9,6 +10,9 @@ RUN apt-get update && apt-get install -y \
     zip \
     git \
     nginx \
+    curl \
+    nodejs \
+    npm \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd pdo pdo_mysql
 
@@ -16,7 +20,6 @@ RUN apt-get update && apt-get install -y \
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 RUN rm -rf /etc/nginx/sites-enabled/* /etc/nginx/sites-available/*
-
 
 # Configuração do Nginx
 COPY nginx/default.conf /etc/nginx/sites-enabled/default.conf
@@ -30,6 +33,9 @@ RUN chown -R www-data:www-data /var/www
 
 # Instalar dependências do Laravel
 RUN composer install --no-dev --optimize-autoloader
+
+# Instalar dependências do Node.js e executar build
+RUN npm install && npm run build
 
 # Expor portas necessárias
 EXPOSE 80 443
