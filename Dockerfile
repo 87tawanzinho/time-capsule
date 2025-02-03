@@ -16,7 +16,7 @@ RUN apt-get update && apt-get install -y \
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Configuração do Nginx
-COPY nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY nginx/default.conf /etc/nginx/sites-enabled/default.conf
 
 # Copiar o código da aplicação
 WORKDIR /var/www
