@@ -1,24 +1,31 @@
-# Use uma imagem PHP adequada para o Laravel
+# Use uma imagem oficial do PHP com Nginx
 FROM php:8.2-fpm
 
-# Instalar pacotes necessários (sem libpcntl-dev)
+# Instalar dependências necessárias
 RUN apt-get update && apt-get install -y \
-    git unzip libzip-dev libpng-dev libjpeg-dev libfreetype6-dev \
-    && docker-php-ext-configure zip \
-    && docker-php-ext-install zip gd pdo pdo_mysql
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    zip \
+    git \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install gd pdo pdo_mysql
 
-# Instalar Composer (necessário para o Laravel)
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# Instalar Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Configurações do Laravel e do ambiente
+# Copiar o código da aplicação
 WORKDIR /var/www
+COPY src/ .
 
-# Copiar o código do aplicativo Laravel
-COPY . .
+# Definir permissões corretas para diretórios
+RUN chown -R www-data:www-data /var/www
 
-# Instalar dependências do Laravel (com o Composer)
-RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+# Instalar dependências do Laravel
+RUN composer install --no-dev --optimize-autoloader
 
-# Expor a porta
+# Expor a porta 9000
 EXPOSE 9000
+
+# Definir o entrypoint para o PHP-FPM
 CMD ["php-fpm"]
