@@ -19,6 +19,27 @@ const documentPreview = ref(null);
 const showInformation = ref(true);
 const enableNotifications = ref(false);
 const submitted = ref(true);
+
+
+function submit() {
+    axios
+        .post("https://n8n-n8n.yeix3z.easypanel.host/webhook/goMany", {
+            name: formStore.form.name,
+            ownerName: formStore.form.owner,
+            message: formStore.form.message,
+            date: formStore.form.date,
+            photo: formStore.form.photo,
+            whatsapp_to: formStore.form.whatsappTo,
+            emailAddress: formStore.form.emailAddress,
+            enableNotifications: formStore.form.enableNotifications,
+            whatsapp_to_notifications_owner: formStore.form.whatsappToNotificationsOwner,
+        })
+        .then((response) => {
+            console.log(response);
+        })
+        .catch((error) => {
+            console.log(error
+}
 </script>
 <template>
     <Head title="Amor em Fotos" />
