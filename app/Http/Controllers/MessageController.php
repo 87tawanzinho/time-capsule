@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use app\Models\Message;
 class MessageController extends Controller
 {
     /**
@@ -27,9 +27,20 @@ class MessageController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $request->validate([
+            "name" => "required|string|max:255",
+            "message" => "required|string",
+            "date" => "nullable|date",
+            "photos" => "nullable|string",
+            "whatsapp_to" => "nullable|string|max:20",
+            "email_address" => "nullable|email|max:255",
+            "whatsapp_to_notifications_owner" => "nullable|string|max:20",
+        ]);
 
+        $message = Message::create($request->all());
+
+        return response()->json($message, 201);
+    }
     /**
      * Display the specified resource.
      */

@@ -21,7 +21,7 @@ const enableNotifications = ref(false);
 const submitted = ref(true);
 </script>
 <template>
-    <Head title="Cápsula do Tempo" />
+    <Head title="Amor em Fotos" />
     <Header />
 
     <div
@@ -49,7 +49,7 @@ const submitted = ref(true);
                     <span
                         class="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600"
                     >
-                        Cápsula do Tempo
+                        Amor em Fotos
                     </span>
                     <span
                         class="block text-xl sm:text-2xl mt-4 text-gray-300 font-light"
