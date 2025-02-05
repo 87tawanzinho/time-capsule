@@ -1,5 +1,5 @@
 <script setup>
-import { Head, Link } from "@inertiajs/vue3";
+import { Head, Link, router } from "@inertiajs/vue3";
 import Header from "@/Components/Header.vue";
 import { ref, computed } from "vue";
 import { Icon } from "@iconify/vue";
@@ -20,8 +20,14 @@ const showInformation = ref(true);
 const enableNotifications = ref(false);
 const submitted = ref(true);
 const payment = ref(false);
+
+const handleBackToHomePage = () => {
+    payment.value = false;
+    currentStep.value = 0;
+    showInformation.value = true;
+};
 function submit() {
-    axios.post("https://n8n-n8n.yeix3z.easypanel.host/webhook/goMany", {
+    const formData = {
         name: formStore.form.name,
         ownerName: formStore.form.owner,
         message: formStore.form.message,
@@ -32,6 +38,20 @@ function submit() {
         enableNotifications: formStore.form.enableNotifications,
         whatsapp_to_notifications_owner:
             formStore.form.whatsappToNotificationsOwner,
+    };
+
+    router.post(route("message.store"), formData, {
+        preserveState: true,
+        preserveScroll: true,
+        onSuccess: () => {
+            // Caso a requisição seja bem-sucedida
+            payment.value = true; // Atualiza o estado para pagamento
+            console.log("Dados enviados com sucesso");
+        },
+        onError: (error) => {
+            // Caso haja um erro na requisição
+            console.error("Erro ao enviar dados:", error);
+        },
     });
 }
 </script>
@@ -375,7 +395,7 @@ function submit() {
 
                         <button
                             v-if="currentStep === 3"
-                            @click="payment = true"
+                            @click="submit"
                             class="w-full sm:w-32 bg-gradient-to-r from-purple-600 to-pink-600 p-3 rounded-lg hover:from-purple-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-purple-600 transition-all text-white font-semibold"
                         >
                             Enviar
@@ -399,15 +419,20 @@ function submit() {
                         <span
                             class="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600"
                         >
-                            Passo 5: Pagamento
+                            Meus Parabéns!
                         </span>
                     </h2>
                     <p class="text-gray-400 text-base sm:text-lg">
-                        Precisamos da sua ajuda para manter nossos servidores
-                        operando de forma segura e estável, garantindo que
-                        possamos continuar enviando nossas cápsulas sem
-                        interrupções no futuro! 🚀🔒
+                        Sua capsula já esta no espaço, pronta para ser enviada
+                        quando for a hora, antes disso, já deve ter chegado mais
+                        informações no seu zap! 🚀🔒
                     </p>
+                    <button
+                        @click="handleBackToHomePage()"
+                        class="w-full sm:w-32 bg-gradient-to-r from-purple-600 to-pink-600 p-3 rounded-lg hover:from-purple-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-purple-600 transition-all text-white font-semibold"
+                    >
+                        Voltar
+                    </button>
                 </div>
             </div>
         </div>

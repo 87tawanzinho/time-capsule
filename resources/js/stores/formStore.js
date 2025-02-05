@@ -7,7 +7,7 @@ export const useFormStore = defineStore("form", () => {
         name: "",
         message: "", // A mensagem que você vai enviar
         date: "",
-        photos: null,
+        photo: null,
         sendWithWhatsapp: false,
         sendWithEmail: false,
         showOwner: false,

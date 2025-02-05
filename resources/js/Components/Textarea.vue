@@ -3,7 +3,7 @@
         <quill-editor
             ref="quillEditor"
             v-model:content="formStore.form.message"
-            contentType="html"
+            contentType="delta"
             theme="snow"
             :toolbar="toolbarOptions"
             class="custom-editor"
@@ -22,14 +22,9 @@ const formStore = useFormStore();
 
 // Opções de ferramentas no Quill Editor
 const toolbarOptions = [
-    [{ header: [1, 2, 3, false] }], // Cabeçalhos H1, H2, H3
-    [{ font: [] }], // Seleção de fonte
-    [{ size: ["small", false, "large", "huge"] }], // Tamanhos de fonte
-    ["bold"], // Negrito
-    [{ color: [] }, { background: [] }], // Cor do texto e fundo
-    [{ align: [] }], // Alinhamento do texto
-    [{ list: "ordered" }, { list: "bullet" }], // Listas ordenadas e não ordenadas
-    ["image"], // Inserir imagem
+    [{ align: [] }],
+    [{ list: "ordered" }, { list: "bullet" }],
+    ["image"], // A ferramenta de imagem
 ];
 
 // Função para alterar a cor do placeholder
@@ -37,7 +32,47 @@ onMounted(() => {
     document
         .querySelector(".ql-editor")
         .setAttribute("data-placeholder", "Escreva algo...");
+
+    // Configura o Quill para usar o handler personalizado de upload de imagem
+    const quillEditor = document.querySelector(".quill-editor");
+    if (quillEditor) {
+        quillEditor.getModule("toolbar").addHandler("image", handleImageUpload);
+    }
+    console.log(quillEditor);
 });
+
+// Função para capturar a imagem e armazená-la no formStore.form.photo
+const handleImageUpload = () => {
+    const input = document.createElement("input");
+    input.setAttribute("type", "file");
+    input.setAttribute("accept", "image/*");
+
+    input.click();
+
+    input.onchange = async () => {
+        const file = input.files[0];
+        if (file) {
+            // Crie um FileReader para ler a imagem localmente
+            const reader = new FileReader();
+
+            reader.onloadend = () => {
+                // Quando a imagem for carregada, definimos no store
+                console.log("FileReader.onloadend", reader.result);
+                formStore.form.photo = reader.result; // Salva a imagem no store (base64)
+                console.log("Imagem salva no store:", formStore.form.photo); // Verificação
+
+                // Insere a imagem no editor
+                const quill =
+                    document.querySelector(".quill-editor").__vue__.quill;
+                const range = quill.getSelection();
+                quill.insertEmbed(range.index, "image", reader.result);
+            };
+
+            // Lê a imagem como URL em base64
+            reader.readAsDataURL(file);
+        }
+    };
+};
 </script>
 
 <style>
