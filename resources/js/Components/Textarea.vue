@@ -3,7 +3,7 @@
         <quill-editor
             ref="quillEditor"
             v-model:content="formStore.form.message"
-            contentType="delta"
+            contentType="text"
             theme="snow"
             :toolbar="toolbarOptions"
             class="custom-editor"
