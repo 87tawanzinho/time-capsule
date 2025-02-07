@@ -9,6 +9,7 @@ import WhatsappVisualizer from "@/Components/WhatsappVisualizer.vue";
 import Text from "@/Components/Text.vue";
 import Rocket from "@/Components/Rocket.vue";
 import { useFormStore } from "@/stores/formStore";
+import InitialText from "@/Components/InitialText.vue";
 const formStore = useFormStore();
 const sendWithWhatsapp = ref(false);
 const sendWithEmail = ref(false);
@@ -16,7 +17,6 @@ const showOwner = ref(false);
 const currentStep = ref(0);
 const photoPreview = ref(null);
 const documentPreview = ref(null);
-const showInformation = ref(true);
 const enableNotifications = ref(false);
 const submitted = ref(true);
 const payment = ref(false);
@@ -24,7 +24,7 @@ const payment = ref(false);
 const handleBackToHomePage = () => {
     payment.value = false;
     currentStep.value = 0;
-    showInformation.value = true;
+    formStore.form.showInformation.value = true;
 };
 function submit() {
     const formData = {
@@ -65,52 +65,16 @@ function submit() {
         <!-- Conteúdo Principal -->
         <div class="relative z-10">
             <!-- Tela Inicial -->
-            <div
-                v-if="showInformation"
-                class="space-y-6 bg-[#121212] bg-opacity-90 p-6 sm:p-8 rounded-xl shadow-lg border border-gray-800"
-            >
-                <!-- Ícone de Cápsula -->
-                <div class="flex justify-center mb-6">
-                    <Icon
-                        icon="game-icons:time-bomb"
-                        class="text-6xl sm:text-8xl text-gray-300 animate-pulse"
-                    />
-                </div>
-
-                <!-- Texto explicativo -->
-                <h1
-                    class="text-4xl sm:text-6xl font-bold text-white text-center mb-8"
-                >
-                    <span
-                        class="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600"
-                    >
-                        Amor em Fotos
-                    </span>
-                    <span
-                        class="block text-xl sm:text-2xl mt-4 text-gray-300 font-light"
-                    >
-                        Guarde memórias, segredos e mensagens para o futuro.
-                    </span>
-                </h1>
-
-                <!-- Botão "Começar Agora" -->
-                <div class="flex justify-center mt-8">
-                    <button
-                        @click="showInformation = false"
-                        class="w-full sm:max-w-md bg-gradient-to-r from-purple-600 to-pink-600 p-4 rounded-xl hover:from-purple-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all text-white font-semibold text-lg"
-                    >
-                        Começar Agora
-                    </button>
-                </div>
-            </div>
-
-            <div class="mt-6 mb-2" v-if="showInformation">
-                <Text :number="1" />
-            </div>
-
+            <InitialText />
             <!-- Formulário de Etapas -->
-            <div v-if="!showInformation && !payment">
-                <div v-if="!showInformation && !payment" class="space-y-8">
+            <div v-if="!formStore.form.showInformation && !payment">
+                <div
+                    v-if="
+                        !formStore.form.formStore.form.showInformation &&
+                        !payment
+                    "
+                    class="space-y-8"
+                >
                     <!-- Etapa 1: Mini Relógio -->
                     <div
                         v-if="currentStep === 0"
@@ -311,45 +275,6 @@ function submit() {
                             />
                         </div>
                     </div>
-
-                    <!-- Opção Email -->
-                    <!-- <div class="space-y-4">
-                        <div
-                            class="flex items-center gap-4 p-4 border border-gray-700 rounded-lg hover:border-purple-600 cursor-pointer"
-                            @click="sendWithEmail = !sendWithEmail"
-                        >
-                            <Icon
-                                icon="mdi:email-outline"
-                                class="text-4xl text-blue-500"
-                            />
-                            <div class="flex-1">
-                                <p class="text-gray-200 font-semibold">
-                                    Enviar via Email
-                                </p>
-                                <p class="text-gray-400 text-sm">
-                                    Envie sua cápsula do tempo diretamente no
-                                    Email da pessoa desejada.
-                                </p>
-                            </div>
-                            <label class="switch">
-                                <input
-                                    type="checkbox"
-                                    v-model="sendWithEmail"
-                                />
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-
-                        <!-- Input para email -->
-
-                    <!-- <div v-if="sendWithEmail" class="pl-14">
-                            <input
-                                v-model="formStore.form.emailAddress"
-                                class="w-full bg-transparent text-gray-200 border border-gray-700 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-purple-600"
-                                placeholder="Endereço de Email"
-                            />
-                        </div>
-                    </div> -->
 
                     <!-- Toggle para notificações -->
                     <div class="mt-6 flex items-center justify-between">

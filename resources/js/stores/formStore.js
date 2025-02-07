@@ -20,6 +20,7 @@ export const useFormStore = defineStore("form", () => {
         dontShowOwner: true,
         enableNotifications: false,
         whatsappToNotificationsOwner: "",
+        showInformation: true,
     });
 
     const setFormData = (key, value) => {
