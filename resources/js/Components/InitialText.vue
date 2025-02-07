@@ -1,30 +1,29 @@
 <template>
     <!-- Ícone de Cápsula -->
-    <div class="flex justify-center mb-6">
-        <Icon
-            icon="game-icons:time-bomb"
-            class="text-6xl sm:text-8xl text-gray-300 animate-pulse"
-        />
-    </div>
-
-    <!-- Texto explicativo -->
-    <h1 class="text-4xl sm:text-6xl font-bold text-white text-center mb-8">
-        <span
-            class="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600"
-        >
-            Capsula do Tempo
-        </span>
-        <span class="block text-xl sm:text-2xl mt-4 text-gray-300 font-light">
-            Guarde memórias, segredos e mensagens para o futuro.
-        </span>
-    </h1>
 
     <div
-        v-if="formStore.form.showInformation"
         class="space-y-6 bg-[#121212] bg-opacity-90 p-6 sm:p-8 rounded-xl shadow-lg border border-gray-800"
     >
-        <InitialText />
+        <div class="flex justify-center mb-6">
+            <Icon
+                icon="game-icons:time-bomb"
+                class="text-6xl sm:text-8xl text-gray-300 animate-pulse"
+            />
+        </div>
 
+        <!-- Texto explicativo -->
+        <h1 class="text-4xl sm:text-6xl font-bold text-white text-center mb-8">
+            <span
+                class="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600"
+            >
+                Capsula do Tempo
+            </span>
+            <span
+                class="block text-xl sm:text-2xl mt-4 text-gray-300 font-light"
+            >
+                Guarde memórias, segredos e mensagens para o futuro.
+            </span>
+        </h1>
         <!-- Botão "Começar Agora" -->
         <div class="flex justify-center mt-8">
             <button

@@ -65,14 +65,11 @@ function submit() {
         <!-- Conteúdo Principal -->
         <div class="relative z-10">
             <!-- Tela Inicial -->
-            <InitialText />
+            <InitialText v-if="formStore.form.showInformation" />
             <!-- Formulário de Etapas -->
             <div v-if="!formStore.form.showInformation && !payment">
                 <div
-                    v-if="
-                        !formStore.form.formStore.form.showInformation &&
-                        !payment
-                    "
+                    v-if="!formStore.form.showInformation && !payment"
                     class="space-y-8"
                 >
                     <!-- Etapa 1: Mini Relógio -->
