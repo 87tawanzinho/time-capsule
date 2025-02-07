@@ -56,7 +56,7 @@ function submit() {
 }
 </script>
 <template>
-    <Head title="Amor em Fotos" />
+    <Head title="Capsula do Tempo" />
     <Header />
 
     <div
