@@ -44,6 +44,6 @@
 <script setup>
 import { Icon } from "@iconify/vue";
 import { useFormStore } from "@/stores/formStore";
-
+import Text from "@/Components/Text.vue";
 const formStore = useFormStore();
 </script>
