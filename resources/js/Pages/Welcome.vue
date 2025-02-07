@@ -6,23 +6,17 @@ import { Icon } from "@iconify/vue";
 import Date from "@/Components/Date.vue";
 import Textarea from "@/Components/Textarea.vue";
 import WhatsappVisualizer from "@/Components/WhatsappVisualizer.vue";
-import Text from "@/Components/Text.vue";
-import Rocket from "@/Components/Rocket.vue";
 import { useFormStore } from "@/stores/formStore";
 import InitialText from "@/Components/InitialText.vue";
+import ZapNotificationsInput from "@/Components/ZapNotificationsInput.vue";
 const formStore = useFormStore();
 const sendWithWhatsapp = ref(false);
-const sendWithEmail = ref(false);
-const showOwner = ref(false);
 const currentStep = ref(0);
-const photoPreview = ref(null);
-const documentPreview = ref(null);
-const enableNotifications = ref(false);
-const submitted = ref(true);
 const payment = ref(false);
 
 const handleBackToHomePage = () => {
     payment.value = false;
+    paymentError.value = false;
     currentStep.value = 0;
     formStore.form.showInformation.value = true;
 };
@@ -51,6 +45,7 @@ function submit() {
         onError: (error) => {
             // Caso haja um erro na requisição
             console.error("Erro ao enviar dados:", error);
+            paymentError.value = true;
         },
     });
 }
@@ -273,30 +268,14 @@ function submit() {
                         </div>
                     </div>
 
-                    <!-- Toggle para notificações -->
                     <div class="mt-6 flex items-center justify-between">
                         <p class="text-gray-300">
                             Vamos manter a comunicação com você pelo zap!
                         </p>
-                        <label class="switch">
-                            <input
-                                type="checkbox"
-                                v-model="formStore.form.enableNotifications"
-                            />
-                            <span class="slider"></span>
-                        </label>
                     </div>
 
                     <!-- Input para WhatsApp do usuário (se notificações estiverem ativadas) -->
-                    <div v-if="formStore.form.enableNotifications" class="mt-4">
-                        <input
-                            v-model="
-                                formStore.form.whatsappToNotificationsOwner
-                            "
-                            class="w-full bg-transparent text-gray-200 border border-gray-700 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-purple-600"
-                            placeholder="Seu número do WhatsApp (com DDD)"
-                        />
-                    </div>
+                    <ZapNotificationsInput />
 
                     <!-- Botões de Navegação -->
                     <div class="flex justify-end mt-8 space-x-4">
@@ -348,6 +327,32 @@ function submit() {
                         Sua capsula já esta no espaço, pronta para ser enviada
                         quando for a hora, antes disso, já deve ter chegado mais
                         informações no seu zap! 🚀🔒
+                    </p>
+                    <button
+                        @click="handleBackToHomePage()"
+                        class="w-full sm:w-32 bg-gradient-to-r from-purple-600 to-pink-600 p-3 rounded-lg hover:from-purple-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-purple-600 transition-all text-white font-semibold"
+                    >
+                        Voltar
+                    </button>
+                </div>
+            </div>
+
+            <div v-if="paymentError">
+                <div
+                    class="bg-[#121212] bg-opacity-90 p-6 sm:p-8 rounded-xl shadow-lg border border-gray-800 space-y-6"
+                >
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white mb-4">
+                        <span
+                            class="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600"
+                        >
+                            Oops, Algo deu errado!
+                        </span>
+                    </h2>
+                    <p class="text-gray-400 text-base sm:text-lg">
+                        Verifique se você setou todas as informações
+                        corretamente e tente novamente. Lembrando que precisamos
+                        apenas que você coloque o numero com o ddd, e também
+                        precisamos da data de envio.
                     </p>
                     <button
                         @click="handleBackToHomePage()"

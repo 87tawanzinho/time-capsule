@@ -68,21 +68,9 @@ class MessageController extends Controller
                 ]
             );
 
-            return response()->json(
-                [
-                    "message" => "Dados enviados com sucesso.",
-                    "response" => json_decode($response->getBody(), true),
-                ],
-                200
-            );
+            return redirect()->back();
         } catch (RequestException $e) {
-            return response()->json(
-                [
-                    "message" => "Erro ao conectar com o webhook.",
-                    "error" => $e->getMessage(),
-                ],
-                500
-            );
+            return redirect()->back();
         }
     }
 

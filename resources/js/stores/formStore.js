@@ -18,8 +18,8 @@ export const useFormStore = defineStore("form", () => {
         whatsappTo: "",
         emailAddress: "",
         dontShowOwner: true,
-        enableNotifications: false,
         whatsappToNotificationsOwner: "",
+        areaCode: "55",
     });
 
     const setFormData = (key, value) => {
