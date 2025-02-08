@@ -32,6 +32,7 @@ function submit() {
         enableNotifications: formStore.form.enableNotifications,
         whatsapp_to_notifications_owner:
             formStore.form.whatsappToNotificationsOwner,
+        areaCode: formStore.form.areaCode,
     };
 
     router.post(route("message.store"), formData, {

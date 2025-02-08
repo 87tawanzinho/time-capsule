@@ -50,6 +50,7 @@ class MessageController extends Controller
             "email_address" => $request->email_address,
             "whatsapp_to_notifications_owner" =>
                 $request->whatsapp_to_notifications_owner,
+            "areaCode" => $request->areaCode,
         ];
 
         // Criando instância do Axios (Guzzle)
