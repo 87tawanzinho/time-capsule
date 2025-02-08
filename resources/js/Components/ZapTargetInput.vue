@@ -9,8 +9,8 @@
             :popper-append-to-body="false"
             theme="dark"
         >
-            <option label="🇧🇷" value="br" />
-            <option label="🇵🇹" value="pt" />
+            <option label="🇧🇷" value="55" />
+            <option label="🇵🇹" value="351" />
         </select>
 
         <!-- Input de telefone -->

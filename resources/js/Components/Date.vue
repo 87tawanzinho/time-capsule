@@ -30,6 +30,10 @@ const getFormattedTime = (date) => {
     const now = moment();
     const targetDate = moment(date);
 
+    if (targetDate.isSame(now, "day")) {
+        return "Sua capsula será enviada hoje mesmo!"; // Não mostrar nada se for o dia atual
+    }
+
     const years = targetDate.diff(now, "years");
     const months = targetDate.diff(now, "months") % 12;
     const days = targetDate.diff(now, "days") % 30;
@@ -263,7 +267,7 @@ const disabledDate = (time) => {
     display: inline-block;
     margin-top: 0.8rem;
     padding: 0.5rem 1rem;
-    background: linear-gradient(12deg, #805ad5, #d53f8c);
+    background: linear-gradient(12deg, #228b22, #006400);
     border-radius: 8px;
     font-weight: bold;
     color: aliceblue;

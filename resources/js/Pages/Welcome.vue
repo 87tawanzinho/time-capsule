@@ -15,12 +15,19 @@ const currentStep = ref(0);
 const payment = ref(false);
 
 const handleBackToHomePage = () => {
-    payment.value = false;
-    paymentError.value = false;
-    currentStep.value = 0;
-    formStore.form.showInformation.value = true;
+    window.location.reload();
 };
 function submit() {
+    if (
+        !formStore.form.name ||
+        !formStore.form.message ||
+        !formStore.form.date ||
+        !formStore.form.whatsappTo ||
+        !formStore.form.whatsappToNotificationsOwner
+    ) {
+        alert("Certifique-se de colocar todas as informações necessarias");
+        return;
+    }
     const formData = {
         name: formStore.form.name,
         ownerName: formStore.form.owner,
@@ -329,6 +336,15 @@ function submit() {
                         quando for a hora, antes disso, já deve ter chegado mais
                         informações no seu zap! 🚀🔒
                     </p>
+
+                    <div class="flex items-center">
+                        <Icon
+                            class="text-[200px]"
+                            icon="streamline-emojis:man-astronaut-2"
+                        />
+
+                        <p>Até logo!</p>
+                    </div>
                     <button
                         @click="handleBackToHomePage()"
                         class="w-full sm:w-32 bg-gradient-to-r from-purple-600 to-pink-600 p-3 rounded-lg hover:from-purple-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-purple-600 transition-all text-white font-semibold"

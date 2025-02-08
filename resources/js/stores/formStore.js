@@ -2,11 +2,16 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
+const getTodayDate = () => {
+    const today = new Date();
+    return today.toISOString().split("T")[0]; // Pega a data atual no formato 'YYYY-MM-DD'
+};
+
 export const useFormStore = defineStore("form", () => {
     const form = ref({
         name: "",
         message: "", // A mensagem que você vai enviar
-        date: "",
+        date: getTodayDate(),
         photo: null,
         sendWithWhatsapp: false,
         sendWithEmail: false,
