@@ -24,7 +24,7 @@ const formStore = useFormStore();
 const toolbarOptions = [
     [{ align: [] }],
     [{ list: "ordered" }, { list: "bullet" }],
-    ["image"], // A ferramenta de imagem
+    // ["image"], // A ferramenta de imagem
 ];
 
 // Função para alterar a cor do placeholder
